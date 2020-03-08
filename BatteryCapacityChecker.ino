@@ -12,6 +12,25 @@
 
 */
 
+
+// Battery Discharge Termination Pin Mapping
+const int TER_R = 9, TER_Y = 10, TER_G = 11, TER_O = 12;
+
+void START_DIS(int DISCHARGE_ENABLE_PIN) {
+  digitalWrite(DISCHARGE_ENABLE_PIN, LOW );
+}
+
+void END_DIS(int DISCHARGE_ENABLE_PIN) {
+  digitalWrite(DISCHARGE_ENABLE_PIN, HIGH);
+}
+
+void DISABLE_DISCHARGE() {
+  Serial.println();
+  Serial.println("Terminating all Discharges");
+  END_DIS(TER_R); END_DIS(TER_Y); END_DIS(TER_O); END_DIS(TER_G);
+  delay(100);
+}
+
 // 16x 2 LCD Configuration HD44780
 #include <LiquidCrystal.h>
 const int rs = 3, en = 4, d4 = 5, d5 = 6, d6 = 7, d7 = 8;
@@ -39,6 +58,12 @@ void RefreshBATVoltage()
 
 
 void setup() {
+  // Pin Mode configuration for Discharge Termination Pins
+  pinMode(TER_R, OUTPUT);
+  pinMode(TER_Y, OUTPUT);
+  pinMode(TER_G, OUTPUT);
+  pinMode(TER_O, OUTPUT);
+
   // Print Code Revision to the LCD.
   Serial.begin(9600);
   Serial.println("Battery Checker");
@@ -52,5 +77,12 @@ void setup() {
 
 void loop() {
   RefreshBATVoltage();
+  //DISABLE_DISCHARGE();
+
+  digitalWrite(TER_R, HIGH );
+  digitalWrite(TER_Y, HIGH );
+  digitalWrite(TER_G, HIGH );
+  digitalWrite(TER_O, HIGH );
+
   delay(100);
 }
