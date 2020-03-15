@@ -47,7 +47,7 @@ void DISABLE_ALL_DISCHARGE() {
 
 //Battery Voltage Measurement
 volatile float BAT_VR = 0.0, BAT_VY = 0.0, BAT_VG = 0.0, BAT_VO = 0.0;
-int VR = A5, VY = A4, VG = A3, VO = A1; //Pins Mapped to Battery Voltage
+int VR = A5, VY = A4, VG = A3, VO = A2; //Pins Mapped to Battery Voltage
 
 float GetBATVoltage(int Battery)
 {
