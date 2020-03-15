@@ -10,8 +10,12 @@
    Hardware: Dummy Load Circuit, 16x 2 LCD Module
    Revision- 1.0
 
+   Timer Library : https://github.com/JChristensen/Timer
+
 */
 
+#include "Timer.h"
+Timer t;
 
 // Battery Discharge Termination Pin Mapping
 const int TER_R = 9, TER_Y = 10, TER_G = 11, TER_O = 12;
@@ -64,11 +68,21 @@ void ButtonPressed() {
   Serial.println("------------------------------------------------>HIT");
 }
 
+
+void IncrementAh() {
+  Serial.println("------------------------------------------------>HIT");
+  Serial.print("2 second tick: millis()=");
+  Serial.println(millis());
+}
+
 void setup() {
+  //Timer for incrementing AH per second
+  int tickEvent = t.every(1000, IncrementAh);
+
 
   // Pin Mode configuration for Pushbutton Input with Internal Pullup
   pinMode(PushbuttonPin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(PushbuttonPin),ButtonPressed,FALLING);
+  attachInterrupt(digitalPinToInterrupt(PushbuttonPin), ButtonPressed, FALLING);
 
   // Pin Mode configuration for Discharge Termination Pins
   pinMode(TER_R, OUTPUT);
@@ -88,6 +102,7 @@ void setup() {
 }
 
 void loop() {
-  RefreshBATVoltage();
+  t.update();
+  //RefreshBATVoltage();
   //DISABLE_DISCHARGE();
 }
