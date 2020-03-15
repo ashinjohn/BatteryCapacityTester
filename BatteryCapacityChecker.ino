@@ -33,7 +33,7 @@ void DISABLE_DISCHARGE() {
 
 // 16x 2 LCD Configuration HD44780
 #include <LiquidCrystal.h>
-const int rs = 3, en = 4, d4 = 5, d5 = 6, d6 = 7, d7 = 8;
+const int rs = 4, en = 3, d4 = 5, d5 = 6, d6 = 7, d7 = 8;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 //Battery Voltage Measurement
@@ -83,6 +83,10 @@ void loop() {
   digitalWrite(TER_Y, HIGH );
   digitalWrite(TER_G, HIGH );
   digitalWrite(TER_O, HIGH );
-
-  delay(100);
+  delay(1000);
+    digitalWrite(TER_R, LOW );
+  digitalWrite(TER_Y, LOW );
+  digitalWrite(TER_G, LOW );
+  digitalWrite(TER_O, LOW );
+    delay(1000);
 }
