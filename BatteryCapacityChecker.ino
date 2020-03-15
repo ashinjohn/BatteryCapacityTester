@@ -56,8 +56,20 @@ void RefreshBATVoltage()
   Serial.println();
 }
 
+//Push Button for starting and stopping discharge
+const int PushbuttonPin = 2;
+int PushbuttonState = 0;
+
+void ButtonPressed() {
+  Serial.println("------------------------------------------------>HIT");
+}
 
 void setup() {
+
+  // Pin Mode configuration for Pushbutton Input with Internal Pullup
+  pinMode(PushbuttonPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(PushbuttonPin),ButtonPressed,FALLING);
+
   // Pin Mode configuration for Discharge Termination Pins
   pinMode(TER_R, OUTPUT);
   pinMode(TER_Y, OUTPUT);
@@ -78,15 +90,4 @@ void setup() {
 void loop() {
   RefreshBATVoltage();
   //DISABLE_DISCHARGE();
-
-  digitalWrite(TER_R, HIGH );
-  digitalWrite(TER_Y, HIGH );
-  digitalWrite(TER_G, HIGH );
-  digitalWrite(TER_O, HIGH );
-  delay(1000);
-    digitalWrite(TER_R, LOW );
-  digitalWrite(TER_Y, LOW );
-  digitalWrite(TER_G, LOW );
-  digitalWrite(TER_O, LOW );
-    delay(1000);
 }
