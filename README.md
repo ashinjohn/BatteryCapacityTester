@@ -10,12 +10,14 @@ MCU - ATmega328P Barebone Arduino
 2.Battery Voltage Mesurement using internal ADC
 3.Cutoff of Dummy Load when battery voltage reaches the lower thershold.
 4.HD44780 16x2 LCD Module
-5.Push Button Potentiometer ( Pending )
+5.Push Button
+6.Push Button Potentiometer ( Pending )
 
 ## **Firmware**
 1.Voltage Measurement using internal ADC
 2.Software Timer for computing time elapsed
 3.Discharge Termination when battery voltage reaches the lower thershold.
 4.HD44780 16x2 LCD Module
-5.User Interface using Push Button Potentiometer ( Pending )
-6.Serial Interface for configuring parameters 
+5.Push Button for Starting and Emergency Stopping Discharge
+6.User Interface using Push Button Potentiometer ( Pending )
+7.Serial Interface for configuring parameters 
