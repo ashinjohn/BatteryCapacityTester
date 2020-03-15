@@ -47,7 +47,7 @@ void DISABLE_ALL_DISCHARGE() {
 
 //Battery Voltage Measurement
 volatile float BAT_VR = 0.0, BAT_VY = 0.0, BAT_VG = 0.0, BAT_VO = 0.0;
-int VR = A5, VY = A4, VG = A3, VO = A2; //Pins Mapped to Battery Voltage
+int VR = A5, VY = A4, VG = A3, VO = A1; //Pins Mapped to Battery Voltage
 
 float GetBATVoltage(int Battery)
 {
@@ -72,15 +72,8 @@ int PushbuttonState = 0;
 uint32_t TIM_IN_R = 0, TIM_IN_Y = 0, TIM_IN_G = 0, TIM_IN_O = 0;
 
 void ButtonPressed() {
-  //Initiate discharge at begining only
-  //  if (discharge == false && AH_R == 0 && AH_Y == 0 && AH_G == 0 && AH_O == 0) {
+
   RefreshBATVoltage();
-  //Recording initial millis
-  /*
-    BAT_TR = millis();
-    BAT_TY = millis();
-    BAT_TG = millis();
-  */
 
   //Stopping all on going discharge when PB is pressed and wait till next press
   if (Odischarge == true || Gdischarge == true || Ydischarge == true || Rdischarge == true ) {
@@ -89,37 +82,67 @@ void ButtonPressed() {
   }
   else {
 
+    //*************** ORANGE **********************
     if (Odischarge == false && BAT_VO > 3.7) {
       // AH value preserved if available
       if ( AH_O == 0) {
-        Serial.println("STARTING FROM 0 AH");
+        Serial.println("STARTING ORANGE FROM 0 AH");
         TIM_IN_O = millis();
       }
       else
       {
-        Serial.println("OLD AH VALUE PRESERVED");
+        Serial.println("OLD AH VALUE ORANGE PRESERVED");
       }
       Odischarge = true;
     }
+    Serial.println("ORANGE BATTERY VOLTAGE LOW");
   }
-}
 
-void IncrementAh() {
-  AH_R = AH_R + 1;
-  AH_Y = AH_Y + 1;
-  AH_G = AH_G + 1;
-  AH_O = AH_O + 1;
+  //*************** GREEN **********************
+  if (Gdischarge == false && BAT_VG > 3.7) {
+    // AH value preserved if available
+    if ( AH_G == 0) {
+      Serial.println("STARTING GREEN FROM G AH");
+      TIM_IN_G = millis();
+    }
+    else
+    {
+      Serial.println("OLD AH VALUE GREEN PRESERVED");
+    }
+    Gdischarge = true;
+  }
+  Serial.println("GREEN BATTERY VOLTAGE LOW");
 
-  /*
-    Serial.print(" AHR=");
-    Serial.print(AH_R);
-    Serial.print(" AHY=");
-    Serial.print(AH_Y);
-    Serial.print(" AHG=");
-    Serial.print(AH_G);
-    Serial.print(" AHO=");
-    Serial.println(AH_O);
-  */
+  //*************** YELLOW **********************
+  if (Ydischarge == false && BAT_VY > 3.7) {
+    // AH value preserved if available
+    if ( AH_Y == 0) {
+      Serial.println("STARTING YELLOW FROM G AH");
+      TIM_IN_Y = millis();
+    }
+    else
+    {
+      Serial.println("OLD AH VALUE YELLOW PRESERVED");
+    }
+    Ydischarge = true;
+  }
+  Serial.println("YELLOW BATTERY VOLTAGE LOW");
+
+  //*************** RED **********************
+  if (Rdischarge == false && BAT_VR > 3.7) {
+    // AH value preserved if available
+    if ( AH_R == 0) {
+      Serial.println("STARTING RED FROM G AH");
+      TIM_IN_R = millis();
+    }
+    else
+    {
+      Serial.println("OLD AH VALUE RED PRESERVED");
+    }
+    Rdischarge = true;
+  }
+  Serial.println("YELLOW BATTERY VOLTAGE LOW");
+
 }
 
 void setup() {
@@ -158,16 +181,15 @@ void loop() {
   //Printing Capacity on LCD
   lcd.clear();
 
+  //******************** ORGANGE **************************
   Serial.print("BAT Voltage O :"); Serial.println(BAT_VO);
-  Serial.print("Odischarge"); Serial.println(Odischarge);
+  Serial.print("ORA discharge :"); Serial.println(Odischarge);
   lcd.setCursor(0, 0);
   lcd.print("O= ");
-
 
   if ( BAT_VO >= 3.0 && Odischarge == true) {
     AH_O = ((millis() - TIM_IN_O) * 0.001) / 3600; //in AH
     Serial.println("Discharging Orange Battery");
-
   }
   else
   {
@@ -177,58 +199,87 @@ void loop() {
   }
   lcd.print(AH_O);
 
+  //******************** YELLOW **************************
+  Serial.print("BAT Voltage Y :"); Serial.println(BAT_VY);
+  Serial.print("YEL discharge :"); Serial.println(Ydischarge);
+  lcd.setCursor(8, 0);
+  lcd.print("Y= ");
+
+  if ( BAT_VY >= 3.0 && Ydischarge == true) {
+    AH_Y = ((millis() - TIM_IN_Y) * 0.001) / 3600; //in AH
+    Serial.println("Discharging Yellow Battery");
+  }
+  else
+  {
+    Serial.println("NOT -Discharging Yellow Battery");
+    Ydischarge = false;
+    END_DIS(TER_Y);
+  }
+  lcd.print(AH_Y);
+
+  //******************** GREEN **************************
+  Serial.print("BAT Voltage G :"); Serial.println(BAT_VG);
+  Serial.print("GRE discharge :"); Serial.println(Gdischarge);
+  lcd.setCursor(0, 1);
+  lcd.print("G= ");
+
+  if ( BAT_VG >= 3.0 && Gdischarge == true) {
+    AH_G = ((millis() - TIM_IN_G) * 0.001) / 3600; //in AH
+    Serial.println("Discharging Green Battery");
+  }
+  else
+  {
+    Serial.println("NOT -Discharging Green Battery");
+    Gdischarge = false;
+    END_DIS(TER_G);
+  }
+  lcd.print(AH_G);
+
+  //******************** RED **************************
+  Serial.print("BAT Voltage R :"); Serial.println(BAT_VR);
+  Serial.print("GRE discharge :"); Serial.println(Rdischarge);
+  lcd.setCursor(8, 1);
+  lcd.print("R= ");
+
+  if ( BAT_VR >= 3.0 && Gdischarge == true) {
+    AH_R = ((millis() - TIM_IN_R) * 0.001) / 3600; //in AH
+    Serial.println("Discharging Red Battery");
+  }
+  else
+  {
+    Serial.println("NOT -Discharging Red Battery");
+    Rdischarge = false;
+    END_DIS(TER_R);
+  }
+  lcd.print(AH_R);
+
   delay(500);
+  //Printing Voltage on LCD
+  lcd.clear();
+  //******************** Orange **************************
+
   lcd.setCursor(0, 0);
   lcd.print("O= ");
   lcd.print(BAT_VO);
+
+  //******************** Yellow **************************
+
+  lcd.setCursor(8, 0);
+  lcd.print("Y= ");
+  lcd.print(BAT_VY);
+
+  //******************** Green **************************
+
+  lcd.setCursor(0, 1);
+  lcd.print("G= ");
+  lcd.print(BAT_VG);
+
+  //******************** Red **************************
+
+  lcd.setCursor(8, 1);
+  lcd.print("R= ");
+  lcd.print(BAT_VR);
+
   delay(500);
 
 }
-/*
-
-  lcd.setCursor(0, 0);
-  lcd.print(((millis() - TIM_IN_R) * 0.001) / 3600);
-  Serial.println((millis() - ts1) * 0.001);
-  }
-
-
-
-
-  lcd.print(AH_R / 3600);
-  lcd.setCursor(8, 0);
-  lcd.print("Y= ");
-  lcd.print(AH_Y / 3600);
-  lcd.setCursor(0, 1);
-  lcd.print("G= ");
-  lcd.print(AH_G / 3600);
-  lcd.setCursor(8, 1);
-  lcd.print("O= ");
-  lcd.print(AH_O / 3600);
-  }
-
-  //RefreshBATVoltage();
-  /*
-  if ( BAT_VR < 3.0 ) {
-    END_DIS(TER_R);
-    lcd.setCursor(0, 0);
-    lcd.print("BAT RED DONE");
-    Serial.println("BAT RED DONE");
-  }
-
-  if ( BAT_VG < 3.0 ) {
-    END_DIS(TER_G);
-    lcd.setCursor(0, 0);
-    lcd.print("BAT GRE DONE");
-    Serial.println("BAT GRE DONE");
-  }
-
-  if ( BAT_VY < 3.0 ) {
-    END_DIS(TER_Y);
-    lcd.setCursor(0, 0);
-    lcd.print("BAT YEL DONE");
-    Serial.println("BAT YEL DONE");
-  }
-
-  //DISABLE_DISCHARGE();
-  }
-*/
