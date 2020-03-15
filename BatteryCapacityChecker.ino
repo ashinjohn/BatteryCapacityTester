@@ -185,14 +185,15 @@ void loop() {
   Serial.print("BAT Voltage O :"); Serial.println(BAT_VO);
   Serial.print("ORA discharge :"); Serial.println(Odischarge);
   lcd.setCursor(0, 0);
-  lcd.print("O= ");
 
   if ( BAT_VO >= 3.0 && Odischarge == true) {
     AH_O = ((millis() - TIM_IN_O) * 0.001) / 3600; //in AH
     Serial.println("Discharging Orange Battery");
+    lcd.print("O= ");
   }
   else
   {
+    lcd.print("O? ");
     Serial.println("NOT -Discharging Orange Battery");
     Odischarge = false;
     END_DIS(TER_O);
@@ -203,14 +204,15 @@ void loop() {
   Serial.print("BAT Voltage Y :"); Serial.println(BAT_VY);
   Serial.print("YEL discharge :"); Serial.println(Ydischarge);
   lcd.setCursor(8, 0);
-  lcd.print("Y= ");
 
   if ( BAT_VY >= 3.0 && Ydischarge == true) {
     AH_Y = ((millis() - TIM_IN_Y) * 0.001) / 3600; //in AH
     Serial.println("Discharging Yellow Battery");
+    lcd.print("Y= ");
   }
   else
   {
+    lcd.print("Y? ");
     Serial.println("NOT -Discharging Yellow Battery");
     Ydischarge = false;
     END_DIS(TER_Y);
@@ -221,14 +223,15 @@ void loop() {
   Serial.print("BAT Voltage G :"); Serial.println(BAT_VG);
   Serial.print("GRE discharge :"); Serial.println(Gdischarge);
   lcd.setCursor(0, 1);
-  lcd.print("G= ");
 
   if ( BAT_VG >= 3.0 && Gdischarge == true) {
     AH_G = ((millis() - TIM_IN_G) * 0.001) / 3600; //in AH
     Serial.println("Discharging Green Battery");
+    lcd.print("G= ");
   }
   else
   {
+    lcd.print("G? ");
     Serial.println("NOT -Discharging Green Battery");
     Gdischarge = false;
     END_DIS(TER_G);
@@ -239,14 +242,15 @@ void loop() {
   Serial.print("BAT Voltage R :"); Serial.println(BAT_VR);
   Serial.print("GRE discharge :"); Serial.println(Rdischarge);
   lcd.setCursor(8, 1);
-  lcd.print("R= ");
 
   if ( BAT_VR >= 3.0 && Gdischarge == true) {
     AH_R = ((millis() - TIM_IN_R) * 0.001) / 3600; //in AH
     Serial.println("Discharging Red Battery");
+    lcd.print("R= ");
   }
   else
   {
+    lcd.print("R? ");
     Serial.println("NOT -Discharging Red Battery");
     Rdischarge = false;
     END_DIS(TER_R);
