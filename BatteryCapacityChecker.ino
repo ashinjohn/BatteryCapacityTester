@@ -26,7 +26,7 @@ Timer t;
 float AH_R = 0, AH_Y = 0, AH_G = 0, AH_O = 0;
 
 // Battery Discharge Termination Pin Mapping
-const int TER_R = 9, TER_Y = 10, TER_G = 11, TER_O = 12;
+const int TER_R = 12, TER_Y = 11, TER_G = 9, TER_O = 10;
 bool Rdischarge = false, Ydischarge = false, Gdischarge = false, Odischarge = false;
 
 void START_DIS(int DISCHARGE_ENABLE_PIN) {
@@ -94,6 +94,7 @@ void ButtonPressed() {
         Serial.println("OLD AH VALUE ORANGE PRESERVED");
       }
       Odischarge = true;
+      START_DIS(TER_O);
     }
     Serial.println("ORANGE BATTERY VOLTAGE LOW");
   }
@@ -110,6 +111,7 @@ void ButtonPressed() {
       Serial.println("OLD AH VALUE GREEN PRESERVED");
     }
     Gdischarge = true;
+    START_DIS(TER_G);
   }
   Serial.println("GREEN BATTERY VOLTAGE LOW");
 
@@ -125,6 +127,7 @@ void ButtonPressed() {
       Serial.println("OLD AH VALUE YELLOW PRESERVED");
     }
     Ydischarge = true;
+    START_DIS(TER_Y);
   }
   Serial.println("YELLOW BATTERY VOLTAGE LOW");
 
@@ -140,6 +143,7 @@ void ButtonPressed() {
       Serial.println("OLD AH VALUE RED PRESERVED");
     }
     Rdischarge = true;
+    START_DIS(TER_R);
   }
   Serial.println("YELLOW BATTERY VOLTAGE LOW");
 
