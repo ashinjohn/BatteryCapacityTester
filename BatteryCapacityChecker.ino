@@ -48,8 +48,8 @@ void DISABLE_ALL_DISCHARGE() {
 //Battery Voltage Measurement
 volatile float BAT_VR = 0.0, BAT_VY = 0.0, BAT_VG = 0.0, BAT_VO = 0.0;
 int VR = A5, VY = A4, VG = A3, VO = A2; //Pins Mapped to Battery Voltage
-volatile float voltarray[5];
-int voltarraysize = 5;
+volatile float voltarray[20];
+int voltarraysize = 20;
 
 void sort(float voltarray[], int voltarraysize) {
   for (int i = 0; i < (voltarraysize - 1); i++) {
@@ -66,10 +66,11 @@ void sort(float voltarray[], int voltarraysize) {
 float GetBATVoltage(int Battery)
 {
   for (int i = 0; i < (voltarraysize - 1); i++) {
+    delay(10);
     voltarray[i] = analogRead(Battery) * (5.0 / 1024.0);
   }
   sort(voltarray, voltarraysize);
-  return voltarray[2];
+  return voltarray[10];
   //return (analogRead(Battery) * (5.0 / 1024.0));
 }
 
@@ -77,10 +78,10 @@ void RefreshBATVoltage()
 {
   Serial.println();
   Serial.println("Battery Voltages");
-  BAT_VR = GetBATVoltage(VR); delay(100); //Serial.print("BAT Voltage R :"); Serial.println(BAT_VR);
-  BAT_VY = GetBATVoltage(VY); delay(100); //Serial.print("BAT Voltage Y :"); Serial.println(BAT_VY);
-  BAT_VG = GetBATVoltage(VG); delay(100); //Serial.print("BAT Voltage G :"); Serial.println(BAT_VG);
-  BAT_VO = GetBATVoltage(VO); delay(100); //Serial.print("BAT Voltage O :"); Serial.println(BAT_VO);
+  BAT_VR = GetBATVoltage(VR);  Serial.print("BAT Voltage R :"); Serial.println(BAT_VR);
+  BAT_VY = GetBATVoltage(VY);  Serial.print("BAT Voltage Y :"); Serial.println(BAT_VY);
+  BAT_VG = GetBATVoltage(VG);  Serial.print("BAT Voltage G :"); Serial.println(BAT_VG);
+  BAT_VO = GetBATVoltage(VO);  Serial.print("BAT Voltage O :"); Serial.println(BAT_VO);
   Serial.println();
 }
 
