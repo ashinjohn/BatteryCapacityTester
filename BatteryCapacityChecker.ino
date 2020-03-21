@@ -113,7 +113,7 @@ void ButtonPressed() {
         Serial.println("OLD AH VALUE ORANGE PRESERVED");
       }
       Odischarge = true;
-      START_DIS(TER_O);
+      START_DIS(TER_O); delay(500);
     }
     Serial.println("ORANGE BATTERY VOLTAGE LOW");
   }
@@ -130,7 +130,7 @@ void ButtonPressed() {
       Serial.println("OLD AH VALUE GREEN PRESERVED");
     }
     Gdischarge = true;
-    START_DIS(TER_G);
+    START_DIS(TER_G); delay(500);
   }
   Serial.println("GREEN BATTERY VOLTAGE LOW");
 
@@ -146,7 +146,7 @@ void ButtonPressed() {
       Serial.println("OLD AH VALUE YELLOW PRESERVED");
     }
     Ydischarge = true;
-    START_DIS(TER_Y);
+    START_DIS(TER_Y); delay(500);
   }
   Serial.println("YELLOW BATTERY VOLTAGE LOW");
 
@@ -162,7 +162,7 @@ void ButtonPressed() {
       Serial.println("OLD AH VALUE RED PRESERVED");
     }
     Rdischarge = true;
-    START_DIS(TER_R);
+    START_DIS(TER_R); delay(500);
   }
   Serial.println("YELLOW BATTERY VOLTAGE LOW");
 
