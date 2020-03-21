@@ -25,6 +25,8 @@ Timer t;
 //Battery AH
 float AH_R = 0, AH_Y = 0, AH_G = 0, AH_O = 0;
 float BatteryCheckVolt = 3.0; // Reduced from 3.7 to 3.0 to reduce failure
+const int COUNT_TH = 5;
+int COUNT_R = 0, COUNT_Y = 0, COUNT_G = 0, COUNT_O = 0;
 
 // Battery Discharge Termination Pin Mapping
 const int TER_R = 12, TER_Y = 11, TER_G = 9, TER_O = 10;
@@ -104,7 +106,7 @@ void ButtonPressed() {
   else {
 
     //*************** ORANGE **********************
-    if (Odischarge == false && BAT_VO > 3.7) {
+    if (Odischarge == false && BAT_VO > BatteryCheckVolt) {
       // AH value preserved if available
       if ( AH_O == 0) {
         Serial.println("STARTING ORANGE FROM 0 AH");
@@ -123,7 +125,7 @@ void ButtonPressed() {
   }
 
   //*************** GREEN **********************
-  if (Gdischarge == false && BAT_VG > 3.0) {
+  if (Gdischarge == false && BAT_VG > BatteryCheckVolt) {
     // AH value preserved if available
     if ( AH_G == 0) {
       Serial.println("STARTING GREEN FROM G AH");
@@ -141,7 +143,7 @@ void ButtonPressed() {
   }
 
   //*************** YELLOW **********************
-  if (Ydischarge == false && BAT_VY > 3.7) {
+  if (Ydischarge == false && BAT_VY > BatteryCheckVolt) {
     // AH value preserved if available
     if ( AH_Y == 0) {
       Serial.println("STARTING YELLOW FROM G AH");
@@ -159,7 +161,7 @@ void ButtonPressed() {
   }
 
   //*************** RED **********************
-  if (Rdischarge == false && BAT_VR > 3.7) {
+  if (Rdischarge == false && BAT_VR > BatteryCheckVolt) {
     // AH value preserved if available
     if ( AH_R == 0) {
       Serial.println("STARTING RED FROM G AH");
@@ -181,7 +183,6 @@ void ButtonPressed() {
 void setup() {
   //Timer for incrementing AH per second
   //int tickEvent = t.every(1000, IncrementAh);
-
 
   // Pin Mode configuration for Pushbutton Input with Internal Pullup
   pinMode(PushbuttonPin, INPUT_PULLUP);
@@ -224,13 +225,19 @@ void loop() {
     AH_O = ((millis() - TIM_IN_O) * 0.001) / 3600; //in AH
     Serial.println("Discharging Orange Battery");
     lcd.print("O= ");
+    COUNT_O = COUNT_TH ;
   }
-  else
+  else if (COUNT_O <= 0)
   {
     lcd.print("O? ");
     Serial.println("NOT -Discharging Orange Battery");
     Odischarge = false;
     END_DIS(TER_O);
+  }
+  else {
+    COUNT_O--;
+    lcd.print("O! ");
+    Serial.println("Reducing Orange Low Counter");
   }
   lcd.print(AH_O);
 
@@ -243,13 +250,19 @@ void loop() {
     AH_Y = ((millis() - TIM_IN_Y) * 0.001) / 3600; //in AH
     Serial.println("Discharging Yellow Battery");
     lcd.print("Y= ");
+    COUNT_Y = COUNT_TH;
   }
-  else
+  else if (COUNT_Y <= 0)
   {
     lcd.print("Y? ");
     Serial.println("NOT -Discharging Yellow Battery");
     Ydischarge = false;
     END_DIS(TER_Y);
+  }
+  else {
+    COUNT_Y--;
+    lcd.print("Y! ");
+    Serial.println("Reducing Yellow Low Counter");
   }
   lcd.print(AH_Y);
 
@@ -262,13 +275,19 @@ void loop() {
     AH_G = ((millis() - TIM_IN_G) * 0.001) / 3600; //in AH
     Serial.println("Discharging Green Battery");
     lcd.print("G= ");
+    COUNT_G = COUNT_TH;
   }
-  else
+  else if (COUNT_G <= 0)
   {
     lcd.print("G? ");
     Serial.println("NOT -Discharging Green Battery");
     Gdischarge = false;
     END_DIS(TER_G);
+  }
+  else {
+    COUNT_G--;
+    lcd.print("G! ");
+    Serial.println("Reducing Green Low Counter");
   }
   lcd.print(AH_G);
 
@@ -277,17 +296,23 @@ void loop() {
   Serial.print("GRE discharge :"); Serial.println(Rdischarge);
   lcd.setCursor(8, 1);
 
-  if ( BAT_VR >= 3.0 && Gdischarge == true) {
+  if ( BAT_VR >= 3.0 && Rdischarge == true) {
     AH_R = ((millis() - TIM_IN_R) * 0.001) / 3600; //in AH
     Serial.println("Discharging Red Battery");
     lcd.print("R= ");
+    COUNT_R = COUNT_TH;
   }
-  else
+  else if (COUNT_R <= 0)
   {
     lcd.print("R? ");
     Serial.println("NOT -Discharging Red Battery");
     Rdischarge = false;
     END_DIS(TER_R);
+  }
+  else {
+    COUNT_R--;
+    lcd.print("R! ");
+    Serial.println("Reducing Red Low Counter");
   }
   lcd.print(AH_R);
 
