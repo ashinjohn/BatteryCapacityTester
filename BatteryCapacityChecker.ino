@@ -115,7 +115,9 @@ void ButtonPressed() {
       Odischarge = true;
       START_DIS(TER_O); delay(500);
     }
-    Serial.println("ORANGE BATTERY VOLTAGE LOW");
+    else {
+      Serial.println("ORANGE BATTERY VOLTAGE LOW");
+    }
   }
 
   //*************** GREEN **********************
@@ -132,7 +134,9 @@ void ButtonPressed() {
     Gdischarge = true;
     START_DIS(TER_G); delay(500);
   }
-  Serial.println("GREEN BATTERY VOLTAGE LOW");
+  else {
+    Serial.println("GREEN BATTERY VOLTAGE LOW");
+  }
 
   //*************** YELLOW **********************
   if (Ydischarge == false && BAT_VY > 3.7) {
@@ -148,7 +152,9 @@ void ButtonPressed() {
     Ydischarge = true;
     START_DIS(TER_Y); delay(500);
   }
-  Serial.println("YELLOW BATTERY VOLTAGE LOW");
+  else {
+    Serial.println("YELLOW BATTERY VOLTAGE LOW");
+  }
 
   //*************** RED **********************
   if (Rdischarge == false && BAT_VR > 3.7) {
@@ -164,7 +170,9 @@ void ButtonPressed() {
     Rdischarge = true;
     START_DIS(TER_R); delay(500);
   }
-  Serial.println("YELLOW BATTERY VOLTAGE LOW");
+  else {
+    Serial.println("YELLOW BATTERY VOLTAGE LOW");
+  }
 
 }
 
@@ -200,6 +208,7 @@ void setup() {
 void loop() {
   t.update();// Timer for AH calc
   RefreshBATVoltage();
+  delay(500);
 
   //Printing Capacity on LCD
   lcd.clear();
@@ -306,7 +315,5 @@ void loop() {
   lcd.setCursor(8, 1);
   lcd.print("R= ");
   lcd.print(BAT_VR);
-
-  delay(500);
 
 }
