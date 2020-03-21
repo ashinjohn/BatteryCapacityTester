@@ -72,7 +72,7 @@ int PushbuttonState = 0;
 uint32_t TIM_IN_R = 0, TIM_IN_Y = 0, TIM_IN_G = 0, TIM_IN_O = 0;
 
 void ButtonPressed() {
-
+  lcd.begin(16, 2); // To test fix loss of display while connecting or disconnecting battery
   RefreshBATVoltage();
 
   //Stopping all on going discharge when PB is pressed and wait till next press
