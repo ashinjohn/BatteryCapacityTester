@@ -24,6 +24,7 @@ Timer t;
 
 //Battery AH
 float AH_R = 0, AH_Y = 0, AH_G = 0, AH_O = 0;
+float BatteryCheckVolt = 3.0; // Reduced from 3.7 to 3.0 to reduce failure
 
 // Battery Discharge Termination Pin Mapping
 const int TER_R = 12, TER_Y = 11, TER_G = 9, TER_O = 10;
@@ -122,7 +123,7 @@ void ButtonPressed() {
   }
 
   //*************** GREEN **********************
-  if (Gdischarge == false && BAT_VG > 3.7) {
+  if (Gdischarge == false && BAT_VG > 3.0) {
     // AH value preserved if available
     if ( AH_G == 0) {
       Serial.println("STARTING GREEN FROM G AH");
