@@ -48,10 +48,29 @@ void DISABLE_ALL_DISCHARGE() {
 //Battery Voltage Measurement
 volatile float BAT_VR = 0.0, BAT_VY = 0.0, BAT_VG = 0.0, BAT_VO = 0.0;
 int VR = A5, VY = A4, VG = A3, VO = A2; //Pins Mapped to Battery Voltage
+volatile float voltarray[5];
+int voltarraysize = 5;
+
+void sort(float voltarray[], int voltarraysize) {
+  for (int i = 0; i < (voltarraysize - 1); i++) {
+    for (int o = 0; o < (voltarraysize - (i + 1)); o++) {
+      if (voltarray[o] > voltarray[o + 1]) {
+        float t = voltarray[o];
+        voltarray[o] = voltarray[o + 1];
+        voltarray[o + 1] = t;
+      }
+    }
+  }
+}
 
 float GetBATVoltage(int Battery)
 {
-  return (analogRead(Battery) * (5.0 / 1024.0));
+  for (int i = 0; i < (voltarraysize - 1); i++) {
+    voltarray[i] = analogRead(Battery) * (5.0 / 1024.0);
+  }
+  sort(voltarray, voltarraysize);
+  return voltarray[2];
+  //return (analogRead(Battery) * (5.0 / 1024.0));
 }
 
 void RefreshBATVoltage()
